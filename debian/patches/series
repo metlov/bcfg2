@@ -5,3 +5,4 @@ umbrella-lint-negate-does-not-define-a-group.patch
 umbrella-lint-fix-groups-in-rules-check.patch
 umbrella-lint-fix-path-in-rules-check.patch
 umbrella-fix-umask-is-already-int.patch
+umbrella-change-plugin-exec-order-to-enable-Properties-in-GroupLogic.path

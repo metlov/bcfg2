@@ -1,0 +1,24 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Core.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Core.py
++++ bcfg2/src/lib/Bcfg2/Server/Core.py
+@@ -913,6 +913,9 @@ class Core(object):
+                     (client_name, sys.exc_info()[1]))
+             connectors = self.plugins_by_type(Connector)
+             for conn in connectors:
++                data = conn.get_additional_data(imd)
++                self.metadata.merge_additional_data(imd, conn.name, data)
++            for conn in connectors:
+                 groups = conn.get_additional_groups(imd)
+                 groupnames = []
+                 for group in groups:
+@@ -942,9 +945,6 @@ class Core(object):
+                         groupnames.append(group)
+ 
+                 self.metadata.merge_additional_groups(imd, groupnames)
+-            for conn in connectors:
+-                data = conn.get_additional_data(imd)
+-                self.metadata.merge_additional_data(imd, conn.name, data)
+             imd.query.by_name = self.build_metadata
+             if self.metadata_cache_mode in ['cautious', 'aggressive']:
+                 self.metadata_cache[client_name] = imd
