@@ -4,9 +4,16 @@
 # this rules file to build on lucid as well.
 WITH_PYTHON2 = $(shell test -f /usr/bin/dh_python2 && echo "--with python2")
 WITH_SPHINXDOC = $(shell test -f /usr/bin/dh_sphinxdoc && echo "--with sphinxdoc")
-
+WITH_APACHE2 = $(shell test -f /usr/bin/dh_apache2 && echo "--with apache2")
+WITH_SYSTEMD = $(shell test -f /usr/bin/dh_systemd_enable && echo "--with systemd")
+WITH_QUILT = $(shell test -f /usr/bin/dh_quilt_patch && echo "--with quilt")
 %:
-	dh $@ ${WITH_PYTHON2} ${WITH_SPHINXDOC}
+	dh $@ ${WITH_PYTHON2} ${WITH_SPHINXDOC} \
+              ${WITH_APACHE2} ${WITH_SYSTEMD} ${WITH_QUILT}
+
+override_dh_systemd_enable:
+	dh_systemd_enable -pbcfg2-server bcfg2-server.service
+	dh_systemd_enable -pbcfg2 --no-enable bcfg2.service
 
 override_dh_installinit:
 	# Install bcfg2 initscript without starting it on postinst
@@ -14,7 +21,7 @@ override_dh_installinit:
 	# Install bcfg2-server initscript without starting it on postinst
 	dh_installinit --package=bcfg2-server --no-start
 	# Install bcfg2-report-collector initscript without starting it on postinst
-	dh_installinit --package=bcfg2-server --name=bcfg2-report-collector --no-start
+	#dh_installinit --package=bcfg2-server --name=bcfg2-report-collector --no-start
 
 override_dh_auto_build:
 	dh_auto_build

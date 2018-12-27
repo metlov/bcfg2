@@ -1,0 +1,47 @@
+From: Arto Jantunen <viiru@debian.org>
+Date: Sat, 20 Jul 2013 17:53:10 +0300
+Subject: Modify systemd service files to suit Debian
+
+---
+ redhat/systemd/bcfg2-server.service | 4 ++--
+ redhat/systemd/bcfg2.service        | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/redhat/systemd/bcfg2-server.service b/redhat/systemd/bcfg2-server.service
+index 7ca649c..107a229 100644
+--- a/redhat/systemd/bcfg2-server.service
++++ b/redhat/systemd/bcfg2-server.service
+@@ -1,12 +1,12 @@
+ [Unit]
+ Description=Bcfg2 configuration daemon
+-After=syslog.target network.target
++After=network.target
+ 
+ [Service]
+ Type=forking
+ StandardOutput=syslog
+ StandardError=syslog
+-EnvironmentFile=-/etc/sysconfig/bcfg2-server
++EnvironmentFile=-/etc/default/bcfg2-server
+ PIDFile=/run/bcfg2-server/bcfg2-server.pid
+ ExecStart=/usr/sbin/bcfg2-server -D /run/bcfg2-server/bcfg2-server.pid $BCFG2_SERVER_OPTIONS
+ 
+diff --git a/redhat/systemd/bcfg2.service b/redhat/systemd/bcfg2.service
+index 245c80c..a93ce52 100644
+--- a/redhat/systemd/bcfg2.service
++++ b/redhat/systemd/bcfg2.service
+@@ -1,12 +1,12 @@
+ [Unit]
+ Description=Bcfg2 configuration client
+-After=syslog.target network.target
++After=network.target
+ 
+ [Service]
+ Type=oneshot
+ StandardOutput=syslog
+ StandardError=syslog
+-EnvironmentFile=-/etc/sysconfig/bcfg2
++EnvironmentFile=-/etc/default/bcfg2
+ ExecStart=/usr/sbin/bcfg2 $BCFG2_OPTIONS
+ RemainAfterExit=yes
+ 

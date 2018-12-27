@@ -23,3 +23,5 @@ testsuite/test.sqlite
 
 # sphinx build data
 man/.doctrees
+
+.pc/

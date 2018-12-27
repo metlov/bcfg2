@@ -1,3 +1,9 @@
+bcfg2 (1.4.0~pre2-1umbrella1) xenial; urgency=medium
+
+  * Applied Ubuntu patches.
+
+ -- Konstantin L. Metlov <metlov@fti.dn.ua>  Thu, 27 Dec 2018 21:09:58 +0300
+
 bcfg2 (1.4.0pre2-0.1) UNRELEASED; urgency=low
 
   * Helper scripts packed in bcfg2-utils

@@ -18,7 +18,10 @@ Build-Depends: debhelper (>= 7.0.50~),
 	       python-doc,
 	       python-mock,
 	       python-mock-doc,
-	       dh-python
+	       dh-python,
+	       dh-apache2,
+	       dh-systemd,
+	       quilt
 Standards-Version: 3.8.0.0
 Homepage: http://bcfg2.org/
 
@@ -50,16 +53,6 @@ Description: Configuration management web interface
  Bcfg2 is a configuration management system that generates configuration sets
  for clients bound by client profiles.
  bcfg2-web is the reporting server for bcfg2.
-
-Package: bcfg2-utils
-Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, bcfg2 (= ${binary:Version})
-Suggests: bcfg2-doc (= ${binary:Version})
-Description: Configuration management helper package
- Bcfg2 is a configuration management system that generates configuration sets
- for clients bound by client profiles.
- bcfg2-utils contains scripts for gethering useful information for config
- creation.
 
 Package: bcfg2-doc
 Section: doc
