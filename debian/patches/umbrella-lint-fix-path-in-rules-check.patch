@@ -1,0 +1,15 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Lint/RequiredAttrs.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Lint/RequiredAttrs.py
++++ bcfg2/src/lib/Bcfg2/Server/Lint/RequiredAttrs.py
+@@ -231,8 +231,8 @@ class RequiredAttrs(Bcfg2.Server.Lint.Se
+             return
+ 
+         for rules in self.core.plugins['Rules'].entries.values():
+-            xdata = rules.pnode.data
+-            for path in xdata.xpath("//Path"):
++            entries = [e for e in rules.entries if e.tag == "Path"]
++            for path in entries:
+                 self.check_entry(path,
+                                  os.path.join(Bcfg2.Options.setup.repository,
+                                               rules.name))

@@ -1,0 +1,15 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Lint/GroupNames.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Lint/GroupNames.py
++++ bcfg2/src/lib/Bcfg2/Server/Lint/GroupNames.py
+@@ -37,8 +37,8 @@ class GroupNames(Bcfg2.Server.Lint.Serve
+         for rules in self.core.plugins['Rules'].entries.values():
+             if not self.HandlesFile(rules.name):
+                 continue
+-            xdata = rules.pnode.data
+-            self.check_entries(xdata.xpath("//Group"),
++            entries = [e for e in rules.entries if e.tag == "Group"]
++            self.check_entries(entries,
+                                os.path.join(Bcfg2.Options.setup.repository,
+                                             rules.name))
+ 

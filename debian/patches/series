@@ -1,2 +1,7 @@
 0001-Update-Apache-configuration-for-version-2.4.patch
 0002-Modify-systemd-service-files-to-suit-Debian.patch
+umbrella-lint-follow-links.patch
+umbrella-lint-negate-does-not-define-a-group.patch
+umbrella-lint-fix-groups-in-rules-check.patch
+umbrella-lint-fix-path-in-rules-check.patch
+umbrella-fix-umask-is-already-int.patch

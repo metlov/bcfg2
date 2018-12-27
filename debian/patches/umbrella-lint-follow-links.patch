@@ -1,0 +1,13 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Lint/Cfg.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Lint/Cfg.py
++++ bcfg2/src/lib/Bcfg2/Server/Lint/Cfg.py
+@@ -83,7 +83,7 @@ class Cfg(ServerPlugin):
+ 
+         # next, get a list of all non-ignored files on the filesystem
+         all_files = set()
+-        for root, _, files in os.walk(cfg.data):
++        for root, _, files in os.walk(cfg.data, followlinks=True):
+             for fname in files:
+                 fpath = os.path.join(root, fname)
+                 # check against the handler ignore patterns and the

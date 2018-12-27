@@ -1,0 +1,39 @@
+Index: bcfg2/src/lib/Bcfg2/Server/BuiltinCore.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/BuiltinCore.py
++++ bcfg2/src/lib/Bcfg2/Server/BuiltinCore.py
+@@ -33,7 +33,7 @@ class BuiltinCore(NetworkCore):
+ 
+         daemon_args = dict(uid=Bcfg2.Options.setup.daemon_uid,
+                            gid=Bcfg2.Options.setup.daemon_gid,
+-                           umask=int(Bcfg2.Options.setup.umask, 8),
++                           umask=Bcfg2.Options.setup.umask,
+                            detach_process=True,
+                            files_preserve=self._logfilehandles())
+         if Bcfg2.Options.setup.daemon:
+Index: bcfg2/src/lib/Bcfg2/Server/CherrypyCore.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/CherrypyCore.py
++++ bcfg2/src/lib/Bcfg2/Server/CherrypyCore.py
+@@ -124,7 +124,7 @@ class CherrypyCore(NetworkCore):
+         DropPrivileges(cherrypy.engine,
+                        uid=Bcfg2.Options.setup.daemon_uid,
+                        gid=Bcfg2.Options.setup.daemon_gid,
+-                       umask=int(Bcfg2.Options.setup.umask, 8)).subscribe()
++                       umask=Bcfg2.Options.setup.umask).subscribe()
+ 
+     def _run(self):
+         """ Start the server listening. """
+Index: bcfg2/src/lib/Bcfg2/Server/Core.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Core.py
++++ bcfg2/src/lib/Bcfg2/Server/Core.py
+@@ -1479,7 +1479,7 @@ class NetworkCore(Core):
+             os.environ['HOME'] = \
+                 pwd.getpwuid(Bcfg2.Options.setup.daemon_uid)[5]
+         else:
+-            os.umask(int(Bcfg2.Options.setup.umask, 8))
++            os.umask(Bcfg2.Options.setup.umask)
+ 
+         Core.run(self)
+ 
