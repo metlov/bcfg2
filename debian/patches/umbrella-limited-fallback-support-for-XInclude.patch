@@ -1,0 +1,27 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Plugin/helpers.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Plugin/helpers.py
++++ bcfg2/src/lib/Bcfg2/Server/Plugin/helpers.py
+@@ -606,8 +606,20 @@ class XMLFileBacked(FileBacked):
+             extras = glob.glob(fpath)
+             if not extras:
+                 msg = "%s: %s does not exist, skipping" % (self.name, name)
+-                if el.findall('./%sfallback' % Bcfg2.Server.XI_NAMESPACE):
+-                    self.logger.debug(msg)
++                fallbacks=el.findall('./%sfallback' % Bcfg2.Server.XI_NAMESPACE)
++                if fallbacks:
++                    for fallback in fallbacks:
++                        fallback_includes=fallback.findall('./' +xinclude)
++                        if fallback_includes:
++                            for fallback_include in fallback_includes:
++                                # convert fallback include name to absolute path
++                                incname=fallback_include.get("href")
++                                if incname.startswith("/"):
++                                    incfpath = incname
++                                else:
++                                    rel = fname or self.name
++                                    incfpath = os.path.join(os.path.dirname(rel), incname)
++                                extras.extend(glob.glob(incfpath))
+                 else:
+                     self.logger.error(msg)
+                 # add a FAM monitor for this path.  this isn't perfect
