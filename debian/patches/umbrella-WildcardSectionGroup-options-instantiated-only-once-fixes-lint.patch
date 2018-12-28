@@ -1,0 +1,15 @@
+Index: bcfg2/src/lib/Bcfg2/Options/OptionGroups.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Options/OptionGroups.py
++++ bcfg2/src/lib/Bcfg2/Options/OptionGroups.py
+@@ -198,7 +198,9 @@ class WildcardSectionGroup(_OptionContai
+                     newopts.append(option)
+                 self.extend(newopts)
+                 for parser in self.parsers:
+-                    parser.add_options(newopts)
++                    p_all_cf = [o.cf for o in parser.option_list]
++                    p_newopts=[o for o in newopts if o.cf not in p_all_cf]
++                    parser.add_options(p_newopts)
+         return sections
+ 
+     def add_to_parser(self, parser):

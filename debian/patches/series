@@ -7,3 +7,4 @@ umbrella-lint-fix-path-in-rules-check.patch
 umbrella-fix-umask-is-already-int.patch
 umbrella-change-plugin-exec-order-to-enable-Properties-in-GroupLogic.path
 umbrella-limited-fallback-support-for-XInclude.patch
+umbrella-WildcardSectionGroup-options-instantiated-only-once-fixes-lint.patch
