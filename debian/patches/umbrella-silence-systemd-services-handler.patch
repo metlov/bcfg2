@@ -1,0 +1,31 @@
+Index: bcfg2/src/lib/Bcfg2/Client/Tools/Systemd.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Client/Tools/Systemd.py
++++ bcfg2/src/lib/Bcfg2/Client/Tools/Systemd.py
+@@ -37,7 +37,7 @@ class Systemd(Bcfg2.Client.Tools.SvcTool
+             # bootstatus is unspecified and status is ignore
+             return True
+ 
+-        if self.cmd.run(self.get_svc_command(entry, 'is-enabled')):
++        if self.cmd.run(self.get_svc_command(entry, 'is-enabled'), quiet=True):
+             current_bootstatus = 'on'
+         else:
+             current_bootstatus = 'off'
+@@ -98,9 +98,17 @@ class Systemd(Bcfg2.Client.Tools.SvcTool
+         """Find Extra Systemd Service entries."""
+         specified = [self.get_svc_name(entry)
+                      for entry in self.getSupportedEntries()]
++        masked = set()
++        for fname in glob.glob("/etc/systemd/system/*"):
++            if os.path.islink(fname) and os.readlink(fname)=="/dev/null":
++                masked.add(os.path.basename(fname))
+         extra = set()
+         for fname in glob.glob("/etc/systemd/system/*.wants/*"):
++            if os.path.islink(fname) and not os.path.exists(fname):
++                continue
+             name = os.path.basename(fname)
++            if name in masked:
++                continue
+             if name not in specified:
+                 extra.add(name)
+         return [Bcfg2.Client.XML.Element('Service', name=name, type='systemd')
