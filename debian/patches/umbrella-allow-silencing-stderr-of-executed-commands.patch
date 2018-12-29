@@ -1,0 +1,27 @@
+Index: bcfg2/src/lib/Bcfg2/Utils.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Utils.py
++++ bcfg2/src/lib/Bcfg2/Utils.py
+@@ -217,6 +217,10 @@ class Executor(object):
+         :type timeout: float
+         :returns: :class:`Bcfg2.Utils.ExecutorResult`
+         """
++        quiet = False
++        if 'quiet' in kwargs:
++            quiet = kwargs['quiet']
++            kwargs.pop('quiet')
+         shell = False
+         if 'shell' in kwargs:
+             shell = kwargs['shell']
+@@ -252,7 +256,10 @@ class Executor(object):
+             for line in stdout.splitlines():  # pylint: disable=E1103
+                 self.logger.debug('< %s' % line)
+             for line in stderr.splitlines():  # pylint: disable=E1103
+-                self.logger.info(line)
++                if quiet == True:
++                    self.logger.debug('| %s' % line)
++                else:
++                    self.logger.info(line)
+             return ExecutorResult(stdout, stderr,
+                                   proc.wait())  # pylint: disable=E1101
+         finally:
