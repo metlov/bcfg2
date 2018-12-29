@@ -1,0 +1,80 @@
+Index: bcfg2/schemas/nagiosgen.xsd
+===================================================================
+--- bcfg2.orig/schemas/nagiosgen.xsd
++++ bcfg2/schemas/nagiosgen.xsd
+@@ -7,6 +7,8 @@
+     </xsd:documentation>
+   </xsd:annotation>
+ 
++  <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
++              schemaLocation="xml.xsd"/>
+   <xsd:import namespace="http://genshi.edgewall.org/"
+               schemaLocation="genshi.xsd"/>
+ 
+@@ -27,22 +29,25 @@
+     <xsd:attributeGroup ref="py:genshiAttrs"/>
+   </xsd:complexType>
+ 
+-  <xsd:element name="NagiosGen">
+-    <xsd:complexType>
+-      <xsd:choice minOccurs="1" maxOccurs="unbounded">
+-        <xsd:group ref="py:genshiElements"/>
+-        <xsd:element name="Option" type="OptionType"/>
+-        <xsd:element name="Group" type="NagiosGenGroupType"/>
+-        <xsd:element name="Client" type="NagiosGenGroupType"/>
+-      </xsd:choice>
+-      <xsd:attribute name="lax_decryption" type="xsd:boolean">
+-        <xsd:annotation>
+-          <xsd:documentation>
+-            Override the global lax_decryption setting in
+-            ``bcfg2.conf``.
+-          </xsd:documentation>
+-        </xsd:annotation>
+-      </xsd:attribute>
+-    </xsd:complexType>
+-  </xsd:element>
++  <xsd:complexType name='NagiosGenType'>
++    <xsd:choice minOccurs="1" maxOccurs="unbounded">
++      <xsd:group ref="py:genshiElements"/>
++      <xsd:element name="Option" type="OptionType"/>
++      <xsd:element name="Group" type="NagiosGenGroupType"/>
++      <xsd:element name="Client" type="NagiosGenGroupType"/>
++      <xsd:element name="NagiosGen" type="NagiosGenType"/>
++    </xsd:choice>
++    <xsd:attribute name="lax_decryption" type="xsd:boolean">
++      <xsd:annotation>
++        <xsd:documentation>
++          Override the global lax_decryption setting in
++          ``bcfg2.conf``.
++        </xsd:documentation>
++      </xsd:annotation>
++    </xsd:attribute>
++    <xsd:attributeGroup ref="py:genshiAttrs"/>
++    <xsd:attribute ref="xml:base"/>
++  </xsd:complexType>
++
++  <xsd:element name="NagiosGen" type="NagiosGenType"/>
+ </xsd:schema>
+Index: bcfg2/src/lib/Bcfg2/Server/Plugins/NagiosGen.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Plugins/NagiosGen.py
++++ bcfg2/src/lib/Bcfg2/Server/Plugins/NagiosGen.py
+@@ -61,9 +61,15 @@ class NagiosGen(Plugin, Generator):
+ 
+         # read the config
+         xtra = dict()
+-        for el in self.config.Match(metadata):
+-            if el.tag == 'Option':
+-                xtra[el.get("name")] = el.text
++
++        def recurse(xtra, elementlist):
++            for el in elementlist:
++                if el.tag == 'NagiosGen':
++                    recurse(xtra, list(el))
++                if el.tag == 'Option':
++                    xtra[el.get("name")] = el.text
++
++        recurse(xtra, self.config.Match(metadata))
+ 
+         if xtra:
+             host_config.extend([self.line_fmt % (opt, val)
