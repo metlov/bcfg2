@@ -11,3 +11,4 @@ umbrella-WildcardSectionGroup-options-instantiated-only-once-fixes-lint.patch
 umbrella-allow-silencing-stderr-of-executed-commands.patch
 umbrella-silence-systemd-services-handler.patch
 umbrella-add-xinclude-support-to-nagiosgen.patch
+umbrella-fix-SSLCACertCreator.patch

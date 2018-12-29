@@ -1,0 +1,34 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Plugins/Cfg/CfgSSLCACertCreator.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Plugins/Cfg/CfgSSLCACertCreator.py
++++ bcfg2/src/lib/Bcfg2/Server/Plugins/Cfg/CfgSSLCACertCreator.py
+@@ -83,9 +83,9 @@ class CfgSSLCACertCreator(XMLCfgCreator,
+         for altname in altnames:
+             cfp.set('alt_names', 'DNS.' + str(altnamenum), altname)
+             altnamenum += 1
+-        for item in ['C', 'L', 'ST', 'O', 'OU', 'emailAddress']:
++        for item in ['c', 'l', 'st', 'o', 'ou', 'emailAddress']:
+             if cert.get(item):
+-                cfp.set('req_distinguished_name', item, cert.get(item))
++                cfp.set('req_distinguished_name', item.upper(), cert.get(item))
+         cfp.set('req_distinguished_name', 'CN', metadata.hostname)
+         self.debug_log("Cfg: Writing temporary CSR config to %s" % fname)
+         try:
+@@ -215,7 +215,7 @@ class CfgSSLCACertCreator(XMLCfgCreator,
+         ca = self.get_ca(cert.get("ca", "default"))
+         chaincert = ca.get('chaincert')
+         cmd = ["openssl", "verify"]
+-        is_root = ca.get('root_ca', "false").lower() == 'true'
++        is_root = ca.get('root_ca', False)
+         if is_root:
+             cmd.append("-CAfile")
+         else:
+@@ -224,7 +224,7 @@ class CfgSSLCACertCreator(XMLCfgCreator,
+         cmd.extend([chaincert, filename])
+         self.debug_log("Cfg: Verifying %s against CA" % entry.get("name"))
+         result = self.cmd.run(cmd)
+-        if result.stdout == cert + ": OK\n":
++        if result.stdout == filename + ": OK\n":
+             self.debug_log("Cfg: %s verified successfully against CA" %
+                            entry.get("name"))
+         else:
