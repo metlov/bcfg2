@@ -1,0 +1,34 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Plugins/ACL.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Plugins/ACL.py
++++ bcfg2/src/lib/Bcfg2/Server/Plugins/ACL.py
+@@ -74,12 +74,23 @@ class IPACLFile(Bcfg2.Server.Plugin.XMLF
+             self.debug_log("ACL: %s requests %s: No IP ACLs, defer" %
+                            (address, rmi))
+             return self.actions["Defer"]
+-        for entry in self.entries:
+-            if (ip_matches(address, entry) and
+-                    rmi_names_equal(entry.get("method"), rmi)):
+-                self.debug_log("ACL: %s requests %s: Found matching IP ACL, "
+-                               "%s" % (address, rmi, entry.tag.lower()))
+-                return self.actions[entry.tag]
++
++        def recurse(elementlist):
++            for entry in elementlist:
++                if entry.tag == 'ACL':
++                    result=recurse(list(entry))
++                    if result is not None:
++                        return result
++                else:
++                    if (ip_matches(address, entry) and
++                            rmi_names_equal(entry.get("method"), rmi)):
++                        self.debug_log("ACL: %s requests %s: Found matching IP ACL, "
++                                       "%s" % (address, rmi, entry.tag.lower()))
++                        return self.actions[entry.tag]
++        result=recurse(self.entries)
++        if result is not None:
++            return result
++
+         if address == "127.0.0.1":
+             self.debug_log("ACL: %s requests %s: No matching IP ACLs, "
+                            "localhost allowed" % (address, rmi))
