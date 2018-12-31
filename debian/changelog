@@ -1,3 +1,9 @@
+bcfg2 (1.4.0~pre2+umbrella2) xenial; urgency=medium
+
+  * Fix bcfg2-lint's MergeFiles differently.
+
+ -- Konstantin L. Metlov <metlov@fti.dn.ua>  Mon, 31 Dec 2018 17:10:17 +0300
+
 bcfg2 (1.4.0~pre2+umbrella1) xenial; urgency=medium
 
   * Change plugin execution order to enable Properties in GroupLogic.

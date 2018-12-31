@@ -1,0 +1,14 @@
+Index: bcfg2/src/lib/Bcfg2/Server/Lint/MergeFiles.py
+===================================================================
+--- bcfg2.orig/src/lib/Bcfg2/Server/Lint/MergeFiles.py
++++ bcfg2/src/lib/Bcfg2/Server/Lint/MergeFiles.py
+@@ -49,6 +49,9 @@ class MergeFiles(Bcfg2.Server.Lint.Serve
+                 ignore.extend(hdlr.__basenames__)
+ 
+         for filename, entryset in self.core.plugins['Cfg'].entries.items():
++            entrykeys=entryset.entries.keys()
++            if ('sslkey.xml' in entrykeys) or ('sslcert.xml' in entrykeys):
++                continue
+             candidates = dict([(f, e) for f, e in entryset.entries.items()
+                                if (isinstance(e, CfgGenerator) and
+                                    is_string(e.data,
