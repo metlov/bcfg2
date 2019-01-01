@@ -1,3 +1,9 @@
+bcfg2 (1.4.0~pre2+umbrella2-bionic1) bionic; urgency=medium
+
+  * Bump version to make a bionic port.
+
+ -- Konstantin L. Metlov <metlov@fti.dn.ua>  Tue, 01 Jan 2019 13:02:47 +0000
+
 bcfg2 (1.4.0~pre2+umbrella2) xenial; urgency=medium
 
   * Fix bcfg2-lint's MergeFiles differently.
